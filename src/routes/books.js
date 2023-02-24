@@ -3,6 +3,7 @@ const router = express.Router();
 
 let { store } = require('../store');
 const { Book } = require('../store');
+const fileMulter = require('../middlewares/file');
 
 router.get('/', (req, res) => {
   res.json(store.books);
@@ -97,6 +98,14 @@ router.delete('/:id', (req, res) => {
   }
 
   res.json('ok');
+});
+
+router.post('/upload-file', fileMulter.single('book-file'), (req, res) => {
+  if (req.file) {
+    const { path } = req.file;
+    res.json({ path });
+  }
+  res.json();
 });
 
 module.exports = router;
