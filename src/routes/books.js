@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+var appRoot = require('app-root-path');
 
 let { store } = require('../store');
 const { Book } = require('../store');
@@ -102,10 +103,19 @@ router.delete('/:id', (req, res) => {
 
 router.post('/upload-file', fileMulter.single('book-file'), (req, res) => {
   if (req.file) {
-    const { path } = req.file;
-    res.json({ path });
+    const { filename } = req.file;
+    res.json({ filename });
   }
   res.json();
+});
+
+router.get('/:id/download', (req, res) => {
+  const { id } = req.params;
+
+  const book = store.books.find((book) => book.id === id);
+
+  const file = `${appRoot}/public/books/${book.fileBook}`;
+  res.download(file);
 });
 
 module.exports = router;

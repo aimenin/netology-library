@@ -24,7 +24,16 @@ class Book {
 
 let store = {
   books: [
-    new Book('test', 'good test', 'me', 'true', 'me.jpg', 'me.txt', 'fortest'),
+    new Book(
+      'test',
+      'good test',
+      'me',
+      'true',
+      'me.jpg',
+      'me.txt',
+      'test.jpg',
+      'fortest'
+    ),
   ],
 };
 
