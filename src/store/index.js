@@ -8,6 +8,7 @@ class Book {
     favorite = '',
     fileCover = '',
     fileName = '',
+    fileBook = '',
     id = uuid()
   ) {
     this.title = title;
@@ -17,6 +18,7 @@ class Book {
     this.favorite = favorite;
     this.fileCover = fileCover;
     this.fileName = fileName;
+    this.fileBook = fileBook;
   }
 }
 
