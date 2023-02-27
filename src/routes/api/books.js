@@ -2,16 +2,16 @@ const express = require('express');
 const router = express.Router();
 var appRoot = require('app-root-path');
 
-let { store } = require('../../store');
+let { getStore, setStore } = require('../../store');
 const { Book } = require('../../store');
 const fileMulter = require('../../middlewares/file');
 
 router.get('/', (req, res) => {
-  res.json(store.books);
+  res.json(getStore().books);
 });
 
 router.get('/:id', (req, res) => {
-  const { books } = store;
+  const { books } = getStore();
   const { id } = req.params;
 
   const book = books.find((book) => book.id === id);
@@ -38,17 +38,19 @@ router.post('/', (req, res) => {
     fileName
   );
 
-  store = {
-    ...store,
-    books: [...store.books, newBook],
+  const newStore = {
+    ...getStore(),
+    books: [...getStore().books, newBook],
   };
+
+  setStore(newStore);
 
   res.status(201);
   res.json(newBook);
 });
 
 router.put('/:id', (req, res) => {
-  const { books } = store;
+  const { books } = getStore();
   const { id } = req.params;
   const {
     title,
@@ -59,8 +61,6 @@ router.put('/:id', (req, res) => {
     fileName,
     fileBook,
   } = req.body;
-
-  console.log('req.body ', req.body);
 
   const indexOfBook = books.findIndex((book) => book.id === id);
 
@@ -85,30 +85,34 @@ router.put('/:id', (req, res) => {
   const newBooks = [...books];
   newBooks[indexOfBook] = bookToEdit;
 
-  store = {
-    ...store,
+  const newStore = {
+    ...getStore(),
     books: newBooks,
   };
 
-  res.json(store.books[indexOfBook]);
+  setStore(newStore);
+
+  res.json(getStore().books[indexOfBook]);
 });
 
 router.delete('/:id', (req, res) => {
   const { id } = req.params;
-  const lengthOfBooks = store.books.length;
+  const lengthOfBooks = getStore().books.length;
 
-  store = {
-    ...store,
-    books: store.books.filter((book) => book.id !== id),
+  const newStore = {
+    ...getStore(),
+    books: getStore().books.filter((book) => book.id !== id),
   };
 
-  if (lengthOfBooks === store.books.length) {
+  setStore(newStore);
+
+  if (lengthOfBooks === getStore().books.length) {
     res.status(404);
     res.json('404 | страница не найдена');
     return;
   }
 
-  res.json('ok');
+  res.redirect(`/`);
 });
 
 router.post('/upload-file', fileMulter.single('book-file'), (req, res) => {
@@ -122,7 +126,7 @@ router.post('/upload-file', fileMulter.single('book-file'), (req, res) => {
 router.get('/:id/download', (req, res) => {
   const { id } = req.params;
 
-  const book = store.books.find((book) => book.id === id);
+  const book = getStore().books.find((book) => book.id === id);
 
   const file = `${appRoot}/public/books/${book.fileBook}`;
   res.download(file);

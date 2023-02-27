@@ -72,21 +72,39 @@
     fileBookFormData.append('book-file', fileBook);
 
     const changeBook = (fileBook) => {
-      return fetch('/api/books/<%= book.id %>', {
-        method: 'PUT',
-        body: JSON.stringify({
-          title,
-          description: desc,
-          authors,
-          favorite,
-          fileCover,
-          fileName,
-          fileBook
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+      if ('<%= method %>' === 'POST') {
+          return fetch('/api/books', {
+          method: 'POST',
+          body: JSON.stringify({
+            title,
+            description: desc,
+            authors,
+            favorite,
+            fileCover,
+            fileName,
+            fileBook
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+      } else {
+          return fetch('/api/books/<%= book.id %>', {
+          method: 'PUT',
+          body: JSON.stringify({
+            title,
+            description: desc,
+            authors,
+            favorite,
+            fileCover,
+            fileName,
+            fileBook
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+      }
     }
 
     if (fileBook) {
