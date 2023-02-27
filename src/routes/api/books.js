@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 var appRoot = require('app-root-path');
 
-let { store } = require('../store');
-const { Book } = require('../store');
-const fileMulter = require('../middlewares/file');
+let { store } = require('../../store');
+const { Book } = require('../../store');
+const fileMulter = require('../../middlewares/file');
 
 router.get('/', (req, res) => {
   res.json(store.books);
@@ -50,8 +50,17 @@ router.post('/', (req, res) => {
 router.put('/:id', (req, res) => {
   const { books } = store;
   const { id } = req.params;
-  const { title, description, authors, favorite, fileCover, fileName } =
-    req.body;
+  const {
+    title,
+    description,
+    authors,
+    favorite,
+    fileCover,
+    fileName,
+    fileBook,
+  } = req.body;
+
+  console.log('req.body ', req.body);
 
   const indexOfBook = books.findIndex((book) => book.id === id);
 
@@ -70,6 +79,7 @@ router.put('/:id', (req, res) => {
     favorite,
     fileCover,
     fileName,
+    fileBook,
   };
 
   const newBooks = [...books];
