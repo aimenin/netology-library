@@ -10,11 +10,4 @@ router.get('/', (req, res) => {
   });
 });
 
-router.delete('/', (req, res) => {
-  res.render('index', {
-    title: 'Список книг',
-    books: getStore().books,
-  });
-});
-
 module.exports = router;

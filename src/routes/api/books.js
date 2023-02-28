@@ -112,7 +112,8 @@ router.delete('/:id', (req, res) => {
     return;
   }
 
-  res.redirect(`/`);
+  res.status(200);
+  res.json({ message: 'Book is deleted' });
 });
 
 router.post('/upload-file', fileMulter.single('book-file'), (req, res) => {

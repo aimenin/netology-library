@@ -27,9 +27,12 @@
   const deleteButton = document.getElementById('delete-button');
   deleteButton.addEventListener('click', (event) => {
     event.preventDefault();
-    console.log(event.currentTarget.getAttribute('data-bookid'));
     fetch(`/api/books/${event.currentTarget.getAttribute('data-bookid')}`, {
       method: 'DELETE'
+    }).then(response => {
+      if (response.ok) {
+        location.reload();
+      }
     })
   })
 </script>

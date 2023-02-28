@@ -116,10 +116,17 @@
       .then(data => {
         return changeBook(data.filename);
       })
-      .then(response => response.json())
-      .then(data => console.log('data ', data));
+      .then(response => {
+        if (response.ok) {
+          window.location.replace('/');
+        }
+      });
     } else {
-      changeBook(fileBookName);
+      changeBook(fileBookName).then(response => {
+        if (response.ok) {
+          window.location.replace('/');
+        }
+      });
     }
   }
 
