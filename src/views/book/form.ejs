@@ -29,7 +29,6 @@
 
   <div class="form-check form-check-inline">
     <input type="checkbox"
-           value="<%= book.favorite %>"
            name="favorite"
            class="form-check-input"
            id="inputFavorite">
@@ -55,6 +54,11 @@
 </form>
 <script>
   const form = document.getElementById('update-form');
+  const favorite = form.querySelector('[name="favorite"]');
+  if ('<%= book.favorite %>' === 'true') {
+    console.log('test');
+    favorite.checked = true;
+  }
 
   const updateBook = (event) => {
     event.preventDefault();
@@ -62,11 +66,13 @@
     const title = form.querySelector('[name="title"]').value;
     const desc = form.querySelector('[name="desc"]').value;
     const authors = form.querySelector('[name="authors"]').value;
-    const favorite = form.querySelector('[name="favorite"]').value;
+    const favorite = form.querySelector('[name="favorite"]').checked;
     const fileCover = form.querySelector('[name="fileCover"]').value;
     const fileName = form.querySelector('[name="fileName"]').value;
     const fileBookName = form.querySelector('[name="fileBookName"]').value;
     const fileBook = form.querySelector('[name="fileBook"]').files[0];
+
+    console.log('favorite', favorite);
 
     const fileBookFormData = new FormData();
     fileBookFormData.append('book-file', fileBook);
@@ -116,16 +122,15 @@
       .then(data => {
         return changeBook(data.filename);
       })
-      .then(response => {
-        if (response.ok) {
-          window.location.replace('/');
-        }
+      .then(response => response.json())
+      .then(data => {
+        window.location.replace(`/views/books/view/${data.id}`);
       });
     } else {
-      changeBook(fileBookName).then(response => {
-        if (response.ok) {
-          window.location.replace('/');
-        }
+      changeBook(fileBookName)
+        .then(response => response.json())
+        .then(data => {
+          window.location.replace(`/views/books/view/${data.id}`);
       });
     }
   }

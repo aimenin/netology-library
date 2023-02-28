@@ -26,8 +26,17 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-  const { title, description, authors, favorite, fileCover, fileName } =
-    req.body;
+  const {
+    title,
+    description,
+    authors,
+    favorite,
+    fileCover,
+    fileName,
+    fileBook,
+  } = req.body;
+
+  console.log('favorite ', favorite);
 
   const newBook = new Book(
     title,
@@ -35,7 +44,8 @@ router.post('/', (req, res) => {
     authors,
     favorite,
     fileCover,
-    fileName
+    fileName,
+    fileBook
   );
 
   const newStore = {
