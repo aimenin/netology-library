@@ -19,12 +19,24 @@
     </div>
   </div>
   <a href="/views/books/update/<%= book.id %>" class="btn btn-primary">Редактировать</a>
+  <a href="#" class="btn btn-danger" id="delete-button" data-bookid=<%= book.id %>>Удалить</a>
 </div>
 <script>
   const header = document.getElementById('book-name');
   if ('<%= book.favorite %>' === 'true') {
     header.innerHTML = '<%= book.title %> <span class="badge badge-secondary">Избранное</span>'
   }
+  const deleteButton = document.getElementById('delete-button');
+  deleteButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    fetch(`/api/books/${event.currentTarget.getAttribute('data-bookid')}`, {
+      method: 'DELETE'
+    }).then(response => {
+      if (response.ok) {
+        window.location.replace('/');
+      }
+    })
+  })
 </script>
 
 <%- include('../port/layout-end') %>
