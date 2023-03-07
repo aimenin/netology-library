@@ -1,0 +1,42 @@
+<%- include('../port/layout-start', {title: title}) %>
+<%- include('../port/menu') %>
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4"><%= book.title %></h1>
+    </div>
+</div>
+<div class="container mt-3 p-0">
+  <div class="d-flex">
+    <div>
+      <img src="https://pbs.twimg.com/media/EZEk5feU8AIaee_.jpg" width="300" height="300" class="mr-2" />
+    </div>
+    <div>
+      <h2 id="book-name"><%= book.title %></h2>
+      <p><b>Авторы: </b><%= book.title %></p>
+      <h3>Описание:</h3>
+      <p><%= book.description %></p>
+    </div>
+  </div>
+  <a href="/views/books/update/<%= book.id %>" class="btn btn-primary">Редактировать</a>
+  <a href="#" class="btn btn-danger" id="delete-button" data-bookid=<%= book.id %>>Удалить</a>
+</div>
+<script>
+  const header = document.getElementById('book-name');
+  if ('<%= book.favorite %>' === 'true') {
+    header.innerHTML = '<%= book.title %> <span class="badge badge-secondary">Избранное</span>'
+  }
+  const deleteButton = document.getElementById('delete-button');
+  deleteButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    fetch(`/api/books/${event.currentTarget.getAttribute('data-bookid')}`, {
+      method: 'DELETE'
+    }).then(response => {
+      if (response.ok) {
+        window.location.replace('/');
+      }
+    })
+  })
+</script>
+
+<%- include('../port/layout-end') %>

@@ -1,0 +1,13 @@
+<%- include('../port/layout-start', {title: title}) %>
+<%- include('../port/menu') %>
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4"><%= book.title %></h1>
+    </div>
+</div>
+<div class="container mt-3">
+  <%- include('./form', {book: book, method: 'PUT'}) %>
+</div>
+
+<%- include('../port/layout-end') %>

@@ -37,7 +37,17 @@ let store = {
   ],
 };
 
+const getStore = () => {
+  return store;
+};
+
+const setStore = (newStore) => {
+  store = newStore;
+};
+
 module.exports = {
   store,
   Book,
+  getStore,
+  setStore,
 };
