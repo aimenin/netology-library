@@ -16,7 +16,7 @@
       <p><b>Авторы: </b><%= book.title %></p>
       <h3>Описание:</h3>
       <p><%= book.description %></p>
-      <p id="viewed">Просмотрено: </p>
+      <p id="viewed">Просмотрено: <%= counter %></p>
     </div>
   </div>
   <a href="/views/books/update/<%= book.id %>" class="btn btn-primary">Редактировать</a>
@@ -28,14 +28,6 @@
     header.innerHTML = '<%= book.title %> <span class="badge badge-secondary">Избранное</span>'
   }
   const deleteButton = document.getElementById('delete-button');
-  fetch('/counter/<%= book.id %>/incr', {
-    method: 'POST'
-  })
-    .then(response => response.json())
-    .then(data => {
-      const viewdParagraph = document.querySelector('#viewed');
-      viewdParagraph.innerHTML = 'Просмотрено ' + data.incr;
-    })
   deleteButton.addEventListener('click', (event) => {
     event.preventDefault();
     fetch(`/api/books/${event.currentTarget.getAttribute('data-bookid')}`, {

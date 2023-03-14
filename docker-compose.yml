@@ -3,15 +3,26 @@ services:
     image: redis
     volumes: 
       - ./data:/data
+  counter:
+    image: node:19.4
+    volumes:
+      - ./counter:/app
+    environment:
+      - REDIS_URL=redis://storage
+    ports:
+      - 3002:3002
+    working_dir: /app
+    command: npm run start
+    depends_on: 
+      - storage
   library:
     image: node:19.4
     volumes:
-      - ./:/app
-    environment:
-      - REDIS_URL=redis://storage
+      - ./library:/app
     ports:
       - 3000:3000
     working_dir: /app
     command: npm run start
     depends_on: 
       - storage
+      - counter

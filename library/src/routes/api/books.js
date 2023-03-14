@@ -36,8 +36,6 @@ router.post('/', (req, res) => {
     fileBook,
   } = req.body;
 
-  console.log('favorite ', favorite);
-
   const newBook = new Book(
     title,
     description,

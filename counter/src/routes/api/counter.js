@@ -1,45 +1,26 @@
 const express = require('express');
 const router = express.Router();
 
-let { getStore } = require('../../store');
 const connectToRedis = require('../../utils/connectToRedis');
 
 router.post('/:bookId/incr', async (req, res) => {
-  const { books } = getStore();
   const { bookId } = req.params;
-
-  const book = books.find((book) => book.id === bookId);
-
-  if (!book) {
-    res.status(404);
-    res.json('404 | книга не найдена');
-    return;
-  }
 
   const redisClient = await connectToRedis();
 
-  const incr = await redisClient.incr(book.title);
+  const incr = await redisClient.incr(bookId);
 
   res.status(200);
   res.json({ message: 'Incremented!', incr });
 });
 
 router.get('/:bookId', async (req, res) => {
-  const { books } = getStore();
   const { bookId } = req.params;
-
-  const book = books.find((book) => book.id === bookId);
-
-  if (!book) {
-    res.status(404);
-    res.json('404 | книга не найдена');
-    return;
-  }
 
   const redisClient = await connectToRedis();
 
   try {
-    const counter = await redisClient.get(book.title);
+    const counter = await redisClient.get(bookId);
     res.status(200);
     res.json({ message: 'Founded', counter });
   } catch {

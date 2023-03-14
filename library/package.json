@@ -7,10 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon ./src/index.js",
     "server": "node ./src/index.js",
-    "start-docker": "docker run -it --rm -v \"%cd%:/code\" -p 80:3000 node /bin/bash",
-    "docker-dev": "docker-compose up --build",
-    "docker-build": "docker-compose -f docker-compose.build.yml up -d",
-    "docker-prod": "docker-compose -f docker-compose.prod.yml up -d"
+    "start-docker": "docker run -it --rm -v \"%cd%:/code\" -p 3000:3000 node /bin/bash"
   },
   "author": "aimenin",
   "license": "ISC",
@@ -19,7 +16,6 @@
     "ejs": "^3.1.8",
     "express": "^4.18.2",
     "multer": "^1.4.5-lts.1",
-    "redis": "^4.6.5",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

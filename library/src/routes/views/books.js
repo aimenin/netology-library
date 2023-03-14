@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 let { getStore } = require('../../store');
-const connectToRedis = require('../../utils/connectToRedis');
 
 router.get('/update/:id', (req, res) => {
   const { books } = getStore();
@@ -28,10 +27,10 @@ router.get('/view/:id', async (req, res) => {
 
   const book = books.find((book) => book.id === id);
 
-  if (book) {
-    const redisClient = await connectToRedis();
-    redisClient.incr(book.title);
-  }
+  const response = await fetch(`http://counter:3002/counter/${id}/incr`, {
+    method: 'POST',
+  });
+  const data = await response.json();
 
   if (!book) {
     res.status(404);
@@ -42,6 +41,7 @@ router.get('/view/:id', async (req, res) => {
   res.render('book/book-info', {
     title: 'Информация о книге',
     book,
+    counter: data.incr,
   });
 });
 
