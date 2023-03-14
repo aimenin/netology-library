@@ -26,9 +26,9 @@ router.post('/:bookId/incr', async (req, res) => {
 
 router.get('/:bookId', async (req, res) => {
   const { books } = getStore();
-  const { id } = req.params;
+  const { bookId } = req.params;
 
-  const book = books.find((book) => book.id === id);
+  const book = books.find((book) => book.id === bookId);
 
   if (!book) {
     res.status(404);

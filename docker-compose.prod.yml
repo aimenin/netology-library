@@ -4,14 +4,10 @@ services:
     volumes: 
       - ./data:/data
   library:
-    image: node:19.4
-    volumes:
-      - ./:/app
+    image: aimenin197/library:0.0.2
     environment:
       - REDIS_URL=redis://storage
     ports:
       - 3000:3000
-    working_dir: /app
-    command: npm run start
     depends_on: 
       - storage
