@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./src/index.js"
+    "start": "nodemon ./src/index.js",
+    "server": "node ./src/index.js",
+    "start-docker": "docker run -it --rm -v \"%cd%:/code\" -p 3000:3000 node /bin/bash"
   },
   "author": "aimenin",
   "license": "ISC",

@@ -16,6 +16,7 @@
       <p><b>Авторы: </b><%= book.title %></p>
       <h3>Описание:</h3>
       <p><%= book.description %></p>
+      <p id="viewed">Просмотрено: <%= counter %></p>
     </div>
   </div>
   <a href="/views/books/update/<%= book.id %>" class="btn btn-primary">Редактировать</a>

@@ -1,0 +1,20 @@
+services:
+  storage:
+    image: redis
+    volumes: 
+      - ./data:/data
+  counter:
+    image: aimenin197/counter:0.0.1
+    environment:
+      - REDIS_URL=redis://storage
+    ports:
+      - 3002:3002
+    depends_on: 
+      - storage
+  library:
+    image: aimenin197/library:0.0.3
+    ports:
+      - 3000:3000
+    depends_on: 
+      - storage
+      - counter

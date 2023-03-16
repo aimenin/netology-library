@@ -56,7 +56,6 @@
   const form = document.getElementById('update-form');
   const favorite = form.querySelector('[name="favorite"]');
   if ('<%= book.favorite %>' === 'true') {
-    console.log('test');
     favorite.checked = true;
   }
 
@@ -71,8 +70,6 @@
     const fileName = form.querySelector('[name="fileName"]').value;
     const fileBookName = form.querySelector('[name="fileBookName"]').value;
     const fileBook = form.querySelector('[name="fileBook"]').files[0];
-
-    console.log('favorite', favorite);
 
     const fileBookFormData = new FormData();
     fileBookFormData.append('book-file', fileBook);

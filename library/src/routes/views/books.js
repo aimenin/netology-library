@@ -21,11 +21,16 @@ router.get('/update/:id', (req, res) => {
   });
 });
 
-router.get('/view/:id', (req, res) => {
+router.get('/view/:id', async (req, res) => {
   const { books } = getStore();
   const { id } = req.params;
 
   const book = books.find((book) => book.id === id);
+
+  const response = await fetch(`http://counter:3002/counter/${id}/incr`, {
+    method: 'POST',
+  });
+  const data = await response.json();
 
   if (!book) {
     res.status(404);
@@ -36,6 +41,7 @@ router.get('/view/:id', (req, res) => {
   res.render('book/book-info', {
     title: 'Информация о книге',
     book,
+    counter: data.incr,
   });
 });
 
