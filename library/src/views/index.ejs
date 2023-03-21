@@ -15,8 +15,8 @@
           <div class="card-body">
             <h5 class="card-title"><%= book.title %></h5>
             <p class="card-text"><%= book.description %></p>
-            <a href="/views/books/view/<%= book.id %>" class="btn btn-primary">Редактировать</a>
-            <a href="#" class="btn btn-danger" id="delete-button" data-bookid=<%= book.id %>>Удалить</a>
+            <a href="/views/books/view/<%= book['_id'] %>" class="btn btn-primary">Редактировать</a>
+            <a href="#" class="btn btn-danger" id="delete-button" data-bookid=<%= book['_id'] %>>Удалить</a>
           </div>
         </div>
       </div>

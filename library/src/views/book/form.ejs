@@ -92,7 +92,7 @@
           }
         })
       } else {
-          return fetch('/api/books/<%= book.id %>', {
+          return fetch('/api/books/<%= book["id"] %>', {
           method: 'PUT',
           body: JSON.stringify({
             title,
@@ -121,13 +121,13 @@
       })
       .then(response => response.json())
       .then(data => {
-        window.location.replace(`/views/books/view/${data.id}`);
+        window.location.replace(`/views/books/view/${data['_id']}`);
       });
     } else {
       changeBook(fileBookName)
         .then(response => response.json())
         .then(data => {
-          window.location.replace(`/views/books/view/${data.id}`);
+          window.location.replace(`/views/books/view/${data['_id']}`);
       });
     }
   }

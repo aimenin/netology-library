@@ -1,4 +1,11 @@
 const { v4: uuid } = require('uuid');
+const mongoose = require('mongoose');
+
+const connectToDataBase = async () => {
+  const client = await mongoose.connect('mongodb://root:example@mongo:27017/');
+
+  return client;
+};
 
 class Book {
   constructor(
