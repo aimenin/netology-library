@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 var appRoot = require('app-root-path');
 
-let { getStore, setStore } = require('../../store');
 const Book = require('../../store/schema/Book');
 const fileMulter = require('../../middlewares/file');
 

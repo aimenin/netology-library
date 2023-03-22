@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-let { getStore } = require('../store');
-
 const Book = require('../store/schema/Book');
 
 router.get('/', async (req, res) => {
