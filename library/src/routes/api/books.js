@@ -2,30 +2,37 @@ const express = require('express');
 const router = express.Router();
 var appRoot = require('app-root-path');
 
-let { getStore, setStore } = require('../../store');
-const { Book } = require('../../store');
+const Book = require('../../store/schema/Book');
 const fileMulter = require('../../middlewares/file');
 
-router.get('/', (req, res) => {
-  res.json(getStore().books);
+router.get('/', async (req, res) => {
+  try {
+    const books = await Book.find().select('-__v');
+    res.json(books);
+  } catch (e) {
+    res.status(500).json(e);
+  }
 });
 
-router.get('/:id', (req, res) => {
-  const { books } = getStore();
+router.get('/:id', async (req, res) => {
   const { id } = req.params;
 
-  const book = books.find((book) => book.id === id);
+  try {
+    const book = await Book.findById(id).select('-__v');
 
-  if (!book) {
-    res.status(404);
-    res.json('404 | книга не найдена');
-    return;
+    if (!book) {
+      res.status(404);
+      res.json('404 | книга не найдена');
+      return;
+    }
+
+    res.json(book);
+  } catch (e) {
+    res.status(500).json(e);
   }
-
-  res.json(book);
 });
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
   const {
     title,
     description,
@@ -36,29 +43,25 @@ router.post('/', (req, res) => {
     fileBook,
   } = req.body;
 
-  const newBook = new Book(
+  const newBook = new Book({
     title,
     description,
     authors,
     favorite,
     fileCover,
     fileName,
-    fileBook
-  );
+    fileBook,
+  });
 
-  const newStore = {
-    ...getStore(),
-    books: [...getStore().books, newBook],
-  };
-
-  setStore(newStore);
-
-  res.status(201);
-  res.json(newBook);
+  try {
+    await newBook.save();
+    res.json(newBook);
+  } catch (e) {
+    res.status(500).json(e);
+  }
 });
 
-router.put('/:id', (req, res) => {
-  const { books } = getStore();
+router.put('/:id', async (req, res) => {
   const { id } = req.params;
   const {
     title,
@@ -70,58 +73,31 @@ router.put('/:id', (req, res) => {
     fileBook,
   } = req.body;
 
-  const indexOfBook = books.findIndex((book) => book.id === id);
-
-  if (indexOfBook === -1) {
-    res.status(404);
-    res.json('404 | книга не найдена');
-    return;
+  try {
+    const book = await Book.findByIdAndUpdate(id, {
+      title,
+      description,
+      authors,
+      favorite,
+      fileCover,
+      fileName,
+      fileBook,
+    });
+    res.status(200).json(book);
+  } catch (e) {
+    res.status(500).json(e);
   }
-
-  let bookToEdit = books[indexOfBook];
-  bookToEdit = {
-    ...bookToEdit,
-    title,
-    description,
-    authors,
-    favorite,
-    fileCover,
-    fileName,
-    fileBook,
-  };
-
-  const newBooks = [...books];
-  newBooks[indexOfBook] = bookToEdit;
-
-  const newStore = {
-    ...getStore(),
-    books: newBooks,
-  };
-
-  setStore(newStore);
-
-  res.json(getStore().books[indexOfBook]);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  const lengthOfBooks = getStore().books.length;
 
-  const newStore = {
-    ...getStore(),
-    books: getStore().books.filter((book) => book.id !== id),
-  };
-
-  setStore(newStore);
-
-  if (lengthOfBooks === getStore().books.length) {
-    res.status(404);
-    res.json('404 | страница не найдена');
-    return;
+  try {
+    await Book.deleteOne({ _id: id });
+    res.json(true);
+  } catch (e) {
+    res.status(500).json(e);
   }
-
-  res.status(200);
-  res.json({ message: 'Book is deleted' });
 });
 
 router.post('/upload-file', fileMulter.single('book-file'), (req, res) => {
@@ -132,13 +108,16 @@ router.post('/upload-file', fileMulter.single('book-file'), (req, res) => {
   res.json();
 });
 
-router.get('/:id/download', (req, res) => {
+router.get('/:id/download', async (req, res) => {
   const { id } = req.params;
 
-  const book = getStore().books.find((book) => book.id === id);
-
-  const file = `${appRoot}/public/books/${book.fileBook}`;
-  res.download(file);
+  try {
+    const book = await Book.findById(id).select('-__v');
+    const file = `${appRoot}/public/books/${book.fileBook}`;
+    res.download(file);
+  } catch (e) {
+    res.status(500).json(e);
+  }
 });
 
 module.exports = router;

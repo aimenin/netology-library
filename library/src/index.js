@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const path = require('path');
 
 const booksApiRouter = require('./routes/api/books');
@@ -18,5 +19,11 @@ app.use('/views/books', booksViewRouter);
 app.use('/api/user', userRouter);
 
 const PORT = process.env.PORT || 3000;
-console.log('App is listening on port: ' + PORT);
-app.listen(PORT);
+
+const startApp = async (port) => {
+  await mongoose.connect('mongodb://root:example@mongo:27017/');
+  console.log('App is listening on port: ' + PORT);
+  app.listen(port);
+};
+
+startApp(PORT);
