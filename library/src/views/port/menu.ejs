@@ -9,7 +9,7 @@
           aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
+  <div class="collapse navbar-collapse flex-row justify-content-between" id="navbarNav">
       <ul class="navbar-nav">
           <li class="nav-item active">
               <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
@@ -17,6 +17,14 @@
           <li class="nav-item">
               <a class="nav-link" href="/views/books">Создать книгу</a>
           </li>
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/api/user/login">Войти</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/api/user/me">Профиль</a>
+        </li>
       </ul>
   </div>
 </nav>
