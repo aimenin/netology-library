@@ -30,7 +30,7 @@ router.get('/view/:id', async (req, res) => {
   try {
     const book = await Book.findById(id).select('-__v');
 
-    const response = await fetch(`http://counter:3002/counter/${id}/incr`, {
+    const response = await fetch(`${process.env.COUNTER_URL}/${id}/incr`, {
       method: 'POST',
     });
     const data = await response.json();
