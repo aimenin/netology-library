@@ -11,20 +11,32 @@ router.get('/login', (req, res) => {
   });
 });
 
-router.get('/me', (req, res) => {
-  res.render('user/profile', {
-    title: 'Profile',
-  });
-});
+router.get(
+  '/me',
+  (req, res, next) => {
+    if (!req.isAuthenticated()) {
+      return res.redirect('/api/user/login');
+    }
+    next();
+  },
+  (req, res) => {
+    res.render('user/profile', {
+      title: 'Profile',
+      user: {
+        name: req.user.username,
+      },
+    });
+  }
+);
 
 router.post(
   '/login',
   passport.authenticate('local', {
-    failureRedirect: '/login',
+    failureRedirect: '/api/user/login',
     failureFlash: true,
   }),
   function (req, res) {
-    res.redirect('/');
+    res.status(200).json({ message: 'ok' });
   }
 );
 
@@ -51,14 +63,13 @@ router.post('/signup', (req, res) => {
   );
 });
 
-app.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/login');
-});
-
-router.post('/login', (req, res) => {
-  res.status(201);
-  res.json({ id: 1, mail: 'test@mail.ru' });
+router.get('/logout', (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/api/user/login');
+  });
 });
 
 module.exports = router;
