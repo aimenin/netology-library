@@ -1,14 +1,12 @@
 const express = require('express');
 const router = express.Router();
 
-const connectToRedis = require('../../utils/connectToRedis');
+const client = require('../../utils/connectToRedis');
 
 router.post('/:bookId/incr', async (req, res) => {
   const { bookId } = req.params;
 
-  const redisClient = await connectToRedis();
-
-  const incr = await redisClient.incr(bookId);
+  const incr = await client.incr(bookId);
 
   res.status(200);
   res.json({ message: 'Incremented!', incr });
@@ -17,10 +15,8 @@ router.post('/:bookId/incr', async (req, res) => {
 router.get('/:bookId', async (req, res) => {
   const { bookId } = req.params;
 
-  const redisClient = await connectToRedis();
-
   try {
-    const counter = await redisClient.get(bookId);
+    const counter = await client.get(bookId);
     res.status(200);
     res.json({ message: 'Founded', counter });
   } catch {

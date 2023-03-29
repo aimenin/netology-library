@@ -1,0 +1,68 @@
+<form method="POST" class="mt-5" id="login-form">
+  <div class="form-group">
+      <label for="inputTitle">Username</label>
+      <input type="text"
+             value=""
+             name="username"
+             class="form-control"
+             id="inputName">
+  </div>
+
+  <div class="form-group">
+    <label for="inputDesc">Пароль</label>
+    <input type="password"
+      value=""
+      name="password"
+      class="form-control"
+      id="inputPassword">
+  </div>
+
+  <div class="form-group text-right ">
+      <button type="submit" class="btn btn-primary" id="login">Войти</button>
+      <button type="submit" class="btn btn-primary" id="signup">Зарегистрироваться</button>
+  </div>
+</form>
+<script>
+  const loginForm = document.getElementById('login-form');
+  loginForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+  })
+  const loginButton = document.getElementById('login');
+  const signupButton = document.getElementById('signup');
+  loginButton.addEventListener('click', (event) => {
+    const username = loginForm.querySelector('[name="username"]').value;
+    const password = loginForm.querySelector('[name="password"]').value;
+    fetch('/api/user/login', {
+      method: 'POST',
+      body: JSON.stringify(
+        {
+          username,
+          password
+        }
+      ),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then(data => window.location.replace('/api/user/me'));
+  });
+  signupButton.addEventListener('click', (event) => {
+    const username = loginForm.querySelector('[name="username"]').value;
+    const password = loginForm.querySelector('[name="password"]').value;
+    fetch('/api/user/signup', {
+      method: 'POST',
+      body: JSON.stringify(
+        {
+          username,
+          password
+        }
+      ),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(response => response.json())
+      .then(data => window.location.replace('/api/user/me'));
+  })
+</script>
