@@ -10,6 +10,10 @@ const commentSchema = new Schema({
     type: String,
     default: '',
   },
+  bookId: {
+    type: String,
+    default: '',
+  },
   createdAt: Number,
   updatedAt: Number,
 });

@@ -19,15 +19,45 @@
       <p id="viewed">Просмотрено: <%= counter %></p>
     </div>
   </div>
+  <div>
+    <h2>Оставте комментарий: </h2>
+    <form id="commentForm">
+      <div class="mb-3">
+        <label for="commentatorName" class="form-label">Ваше имя:</label>
+        <input type="text" class="form-control" id="commentatorName" aria-describedby="emailHelp" name="commentatorName">
+      </div>
+      <div class="mb-3">
+        <label for="textOfComment" class="form-label">Ваш комментарий:</label>
+        <input type="text" class="form-control" id="textOfComment" name="textOfComment">
+      </div>
+      <button type="submit" class="btn btn-primary">Оставить комментарий</button>
+    </formш>
+  </div>
+  <h2>Список комментариев</h2>
+  <div class="list-group mb-1" id="list-of-comments">
+    <% comments.map((comment) => {  %>
+      <a href="#" class="list-group-item list-group-item-action active mb-1" aria-current="true">
+        <p class="mb-1"><%= comment.text %></p>
+        <small><%= comment.author %></small>
+      </a>
+    <% }) %>
+  </div>
   <a href="/views/books/update/<%= book['_id'] %>" class="btn btn-primary">Редактировать</a>
   <a href="#" class="btn btn-danger" id="delete-button" data-bookid=<%= book['_id'] %>>Удалить</a>
 </div>
 <script>
+  const roomName = location.pathname.split('/').pop();
+  const socket = io.connect('/', {query: `roomName=${roomName}`});
   const header = document.getElementById('book-name');
   if ('<%= book.favorite %>' === 'true') {
     header.innerHTML = '<%= book.title %> <span class="badge badge-secondary">Избранное</span>'
   }
+
   const deleteButton = document.getElementById('delete-button');
+  const messageButton = document.getElementById('message-button');
+  const commentForm = document.getElementById('commentForm');
+  const listOfComments = document.getElementById('list-of-comments');
+
   deleteButton.addEventListener('click', (event) => {
     event.preventDefault();
     fetch(`/api/books/${event.currentTarget.getAttribute('data-bookid')}`, {
@@ -37,7 +67,34 @@
         window.location.replace('/');
       }
     })
-  })
+  });
+
+  commentForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const author = commentForm.querySelector('[name="commentatorName"]').value;
+    const text = commentForm.querySelector('[name="textOfComment"]').value;
+
+    socket.emit('add-comment', {
+      author,
+      text,
+      bookId: '<%= book.id %>',
+    })
+  });
+
+  socket.on('message-to-me', (msg) => {
+    console.log('message-to-me');
+  });
+
+  socket.on('message-to-room', (msg) => {
+    console.log('message-to-room');
+    listOfComments.insertAdjacentHTML('beforeend', `
+      <a href="#" class="list-group-item list-group-item-action active mb-1" aria-current="true">
+        <p class="mb-1">${msg.text}</p>
+        <small>${msg.author}</small>
+      </a>
+    `);
+  });
 </script>
 
 <%- include('../port/layout-end') %>
