@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Book = require('../../store/schema/Book');
+const Comment = require('../../store/schema/Comment');
 
 router.get('/update/:id', async (req, res) => {
   const { id } = req.params;
@@ -29,6 +30,7 @@ router.get('/view/:id', async (req, res) => {
 
   try {
     const book = await Book.findById(id).select('-__v');
+    const comments = await Comment.find({ bookId: id }).select('-__v');
 
     const response = await fetch(`${process.env.COUNTER_URL}/${id}/incr`, {
       method: 'POST',
@@ -45,6 +47,7 @@ router.get('/view/:id', async (req, res) => {
       title: 'Информация о книге',
       book,
       counter: data.incr,
+      comments,
     });
   } catch (e) {
     res.status(500).json(e);
