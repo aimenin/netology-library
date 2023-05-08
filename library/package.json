@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon -r dotenv/config ./src/index.js",
     "server": "node -r dotenv/config ./src/index.js",
-    "start-docker": "docker run -it --rm -v \"%cd%:/code\" -p 3000:3000 node /bin/bash"
+    "start-docker": "docker run -it --rm -v \"%cd%:/code\" -p 3000:3000 node /bin/bash",
+    "build": "tsc --project ./tsconfig.json --watch"
   },
   "author": "aimenin",
   "license": "ISC",
@@ -25,6 +26,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^2.0.20",
+    "typescript": "^5.0.4"
   }
 }
