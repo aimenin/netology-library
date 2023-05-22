@@ -20,12 +20,14 @@ router.get(
     next();
   },
   (req, res) => {
-    res.render('user/profile', {
-      title: 'Profile',
-      user: {
-        name: req.user.username,
-      },
-    });
+    if (req.user) {
+      res.render('user/profile', {
+        title: 'Profile',
+        user: {
+          name: req.user.username,
+        },
+      });
+    }
   }
 );
 

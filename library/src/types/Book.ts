@@ -1,7 +1,7 @@
 console.log('test');
 import { injectable } from 'inversify';
 
-interface Book {
+export interface IBook {
   id: string;
   title: string;
   description: string;
@@ -13,7 +13,7 @@ interface Book {
 
 @injectable()
 export abstract class BooksRepository {
-  createBook(book: Book) {}
+  createBook(book: IBook) {}
   getBook(id: string) {}
   getBooks() {}
   updateBook(id: string) {}

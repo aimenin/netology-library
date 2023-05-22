@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { IComment } from '../../types/Comment';
 
 const commentSchema = new Schema({
   author: {
@@ -17,6 +18,6 @@ const commentSchema = new Schema({
   updatedAt: Number,
 });
 
-const Comment = model('Comment', commentSchema);
+const Comment = model<IComment & Document>('Comment', commentSchema);
 
 export default Comment;

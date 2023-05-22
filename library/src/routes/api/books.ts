@@ -126,8 +126,12 @@ router.get('/:id/download', async (req, res) => {
 
   try {
     const book = await Book.findById(id).select('-__v');
-    const file = `${appRoot}/public/books/${book.fileBook}`;
-    res.download(file);
+    if (book && book.fileName) {
+      const file = `${appRoot}/public/books/${book?.fileName}`;
+      res.download(file);
+    } else {
+      res.status(500).json({ message: "Book doesn't contain any files" });
+    }
   } catch (e) {
     res.status(500).json(e);
   }

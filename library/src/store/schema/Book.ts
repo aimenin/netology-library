@@ -1,4 +1,5 @@
-import { Schema, model } from 'mongoose';
+import { Document, Schema, model } from 'mongoose';
+import { IBook } from '../../types/Book';
 
 const bookSchema = new Schema({
   title: {
@@ -10,12 +11,12 @@ const bookSchema = new Schema({
     default: '',
   },
   authors: {
-    type: String,
-    default: '',
+    type: [String],
+    default: [],
   },
   favorite: {
-    type: String,
-    default: '',
+    type: Boolean,
+    default: false,
   },
   fileCover: {
     type: String,
@@ -27,6 +28,6 @@ const bookSchema = new Schema({
   },
 });
 
-const Book = model('Book', bookSchema);
+const Book = model<IBook & Document>('Book', bookSchema);
 
 export default Book;
